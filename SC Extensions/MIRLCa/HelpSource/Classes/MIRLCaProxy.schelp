@@ -1,0 +1,258 @@
+TITLE:: MIRLCaProxy
+summary:: MIRLCaProxy.sc is a work-in-progress subclass of MIRLCa.sc, which provides a high-level approach to save your sessions of live coding using MIRLCa to use it later for training.
+categories:: Machine learning
+related:: Classes/MIRLCa
+
+DESCRIPTION::
+MIRLCaProxy is a subclass of MIRLCa, a SuperCollider extension that inherits from MIRLCRep2 class and expands its capabilities by proposing a virtual agent that embodies interactive machine learning techniques. This subclass allows you to record your live coding sessions using a constrained subset of methods (you need to always give one parameter as part of the query and you need to use the provided list of methods) to be ble to record the session. You can record the session as a text file, which can be used for training (bear in mind that for a good training result, you will need the magnitude of 1,000 lines of code, which you can create by adding several text files when building your training dataset). In sum, this proxy class allows to create a dataset of lines of code to be able to predict the next line of code. MIRLCa works towards providing a VA to interact with Freesound.org.
+MIRLCaProxy is a class used to build the dataset of Task 2: a collection of entries that show call-response actions with values. This will be used to train a model that will predict, from a query, what to respond. TODO: Once a model is trained, it will need to be integrated with the MIRLCa code. Perhaps using an additional "layer"/class is a suitable approach.
+
+
+CLASSMETHODS::
+
+METHOD:: new
+Creates a new instance. Extends the method from MIRLCa, which in turn extends the method from MIRLCRep2.
+
+ARGUMENT:: backend
+An link::Classes/Integer:: indicating the database used, default 0 to use the Freesound database.
+
+ARGUMENT:: dbSize
+An link::Classes/Integer:: indicating the size of the database in terms of the total number of sounds of the Freesound database.
+
+ARGUMENT:: path
+A link::Classes/String:: containing the path name where the sounds are downloaded (write mode).
+
+ARGUMENT:: creditsPath
+A link::Classes/String:: containing the path name where the sound credits list is stored (write mode).
+
+ARGUMENT:: modelsPath
+A link::Classes/String:: containing the path name where the models are loaded from (read mode).
+
+ARGUMENT:: mode
+A link::Classes/Symbol:: that allows to choose between two modalities: \new (default) to create a new session or \load to load an existing session. Note: The expected file is Archive, which comes from a previous version of the code and should be updated to text file.
+
+returns:: A link::Classes/MIRLCaProxy::
+
+PRIVATE:: collection
+
+INSTANCEMETHODS::
+
+subsection:: Performance methods
+
+METHOD:: id
+In performance mode, returns a sound by its Freesound ID number. It is coded as 001 in the text file.
+
+ARGUMENT:: id
+An link::Classes/Integer:: indicating the Freesound ID number of a sound.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. (TODO: to be able to increase the size).
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: tag
+In performance mode, returns the best candidate of a sound from Freesound that contains a requested tag. It is coded as 002 in the text file.
+
+ARGUMENT:: tag
+A link::Classes/String:: that indicates the tag.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. (TODO: to be able to increase the size).
+
+ARGUMENT:: candidates
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: random
+In performance mode, returns the best candidate of a list of random sounds from Freesound. It is coded as 004 in the text file.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. (TODO: to be able to increase the size).
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 7 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: similar
+In performance mode, returns the best candidate of a list of similar sounds from Freesound given a target sound. It is coded as 003 in the text file.
+
+ARGUMENT:: targetnumsnd
+An link::Classes/Integer:: that indicates the index number in the  EMPHASIS::metadata:: link::Classes/Array:: target sound to find a similar sound.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be returned. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. Also, beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: candidates
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sound. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds). Beware of the current maximum number is 14.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: diss
+Returns a sound based on the dissonance feature. It is coded as 008 in the text file.
+
+ARGUMENT:: featvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the dissonance feature and indicates the value of the feature CODE::"dissonance"::. Default value is 1.0. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. Also, beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: featfx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: featfxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: bpm
+Returns a sound based on the BPM feature. It is coded as 006 in the text file.
+
+ARGUMENT:: featvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the BPM feature and indicates the value of the feature CODE::"bpm"::. Default value is 60. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. Also, beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: featfx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: featfxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: dur
+Returns a sound based on the duration feature. It is coded as 007 in the text file.
+
+ARGUMENT:: featvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the duration feature and indicates the value of the feature CODE::"dur"::. Default value is 10 seconds. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: This version is only reading the first value, so it is recommended to leave the default size value to 1 sound. Also, beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: featfx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: featfxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+
+METHOD:: pitch
+Returns a sound based on the pitch feature. It is coded as 005 in the text file.
+
+ARGUMENT:: featvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the pitch feature and indicates the value of the feature CODE::"pitch"::. Default value is 440 Hz. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: this version is only reading the first value, so it is recommended to leave the default size value to 1 sound. Also, beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: featfx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: featfxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. Note: This version is only reading the first value, so it is recommended to leave the default candidates value to 15 sounds (TODO: to be able to add more than 15 sounds).
+
+returns:: A link::Classes/FSSound:: sound
+
+subsection:: Editing & Informative methods
+
+METHOD:: plotdictionary
+Shows the content stored so far (each line of the `collection` dictionary with pairs of lines of code). This can help checking that the training and recording process is going well.
+
+returns:: A link::Classes/String:: showing the content of each line of the dictionary (actiontyprev, actionvalueprev, sessionocounter, soundprev, analysisprev).
+
+METHOD:: sizedictionary
+Shows the content stored so far (counts the total number of items in the `collection` dictionary that stores the actions done in the session, one item per pair of actions or lines of codes). This can help deciding when to stop and save the file.
+
+returns:: A link::Classes/Integer:: showing the total number of elements in the dictionary (equivalent to pairs of lines of code).
+
+METHOD:: savedictionary
+Saves the session (in the form of a dictionary) on a text file. The default path is "/Users/anna/Desktop/session_" ++ date.stamp ++ ".txt" which should be changed. TODO: improve the way of saving (and loading) the text file to work in a session.
+
+returns:: It does not return anything. It saves the dictionary information on a text file.
+
+PRIVATE:: initproxy, addentry, addaction
+
+EXAMPLES::
+
+subsection:: Setup and Instantiation
+
+code::
+(
+// MIRLCa uses 3 directories to:
+// 1) download the sounds from Freesound,
+// 2) create a sound credits list text file with a list of all the used sounds in the performance,
+// 3) load the 3 JSON files that represent the machine learning model and write the 3 JSON files in the training mode.
+// Before instantiating MIRLCa, it is recommended that you define the 3 paths. Please note: the directory should exist! The slash at the end is very important.
+//
+// 1) Directory to download the sounds from Freesound:
+
+z = "/Users/anna/Desktop/MIRLCa-downloads/";
+
+// 2) Directory to create a sound credits list text file with a list of all the used sounds during the live coding session:
+
+y ="/Users/anna/Desktop/MIRLCa-credits/";
+
+// 3) Directory from where to load the 3 JSON files that represent the machine learning model and to save the generated 3 JSON files in the training mode. Please note that the three files "model.JSON", "pca.JSON" and "standardizer.JSON" should exist inside this folder.
+
+x ="/Users/anna/Desktop/MIRLCa-default-models/";
+
+File.mkdir(z); File.mkdir(y); File.mkdir(x);// This line will create the directory if it doesn't exist yet.
+
+// Create an instance with defined paths
+a = MIRLCa.new(path: z, creditsPath: y, modelsPath: x);
+
+// Or to keep it simple and if the paths are correctly defined when instatiating the class:
+
+a = MIRLCaProxy.new
+
+)
+::
+
+subsection:: Performance/recording Mode
+
+code::
+(
+// To play sounds
+
+a.id(9999)
+a.tag("washing-machine")
+a.random(1) // it is not possible to increase the value, not writing anything will return nil
+a.similar(0)
+a.diss(0.5)
+a.bpm(60)
+a.dur(4)
+a.pitch(100)
+
+// To plot stored information
+a.plotdictionary
+
+// To count the number of sounds
+a.sizedictionary
+)
+::
+
+subsection:: Save
+
+code::
+(
+// To save text file (The default path is "/Users/anna/Desktop/session_" ++ date.stamp ++ ".txt)
+a.savedictionary
+)
+::

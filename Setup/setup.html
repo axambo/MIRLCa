@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>setup</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+
+</head>
+
+<body>
+
+<p>Latest update: 9.3.2025</p>
+
+<h1 id="toc_0">Setup Instructions</h1>
+
+<p>This document explains the main setup needed. We will be using <a href="https://supercollider.github.io/">SuperCollider</a>.</p>
+
+<p>You will need the following SuperCollider extensions:</p>
+
+<ul>
+<li><code>MIRLC 2.0</code> (under <code>SC extensions</code>)</li>
+<li><a href="https://github.com/g-roma/Freesound.sc">Freesound.quark</a></li>
+<li><a href="https://github.com/flucoma">FluCoMa</a></li>
+<li><code>MIRLCa</code> (under <code>SC extensions</code>)</li>
+</ul>
+
+<p><strong>Note</strong>: The <code>MIRLC 2.0</code> and <code>MIRLCa</code> code are under development. This repository includes the latest version. Previous released versions are:</p>
+
+<ul>
+<li>MIRLC: <a href="https://github.com/axambo/MIRLC">https://github.com/axambo/MIRLC</a></li>
+<li>MIRLCa: <a href="https://github.com/mirlca/code">https://github.com/mirlca/code</a></li>
+</ul>
+
+<h2 id="toc_1">Step 1: Install SuperCollider</h2>
+
+<p>If you don&#39;t have SuperCollider installed in your computer, please make sure to first install SuperCollider. You can download it from: </p>
+
+<p><a href="https://supercollider.github.io/download">https://supercollider.github.io/download</a></p>
+
+<p>There are versions available for Mac, Linux, and Windows.</p>
+
+<p><strong>For MacOS users</strong>: both signed/notarized and not signed/notarized versions of SuperCollider should work (if available), but we recommend the not-signed/not-notarized version for a less disruptive experience.</p>
+
+<p>If you are unfamiliar with SuperCollider, you can find extensive tutorials online:</p>
+
+<ul>
+<li><a href="https://doc.sccode.org/Tutorials/Getting-Started/00-Getting-Started-With-SC.html">Getting Started tutorial series</a></li>
+<li><a href="https://www.youtube.com/c/elifieldsteel/playlists">Eli Fieldsteel&#39;s video playlists</a></li>
+<li><a href="https://mitpress.mit.edu/books/supercollider-book">The SuperCollider Book</a></li>
+</ul>
+
+<h3 id="toc_2">Dealing with directories</h3>
+
+<p>Several commands will tell you where the common directories of SuperCollider are. Type any of the below commands on the SuperCollider code editor, position your cursor on the line of the command and press <code>cmd+Enter</code>. You will see the path on the post window.</p>
+
+<p>Default directory for temporary files:</p>
+
+<div><pre><code class="language-none">Platform.defaultTempDir</code></pre></div>
+
+<p>System extension directory:</p>
+
+<div><pre><code class="language-none">Platform.systemExtensionDir</code></pre></div>
+
+<p>Platform recordings directory:</p>
+
+<div><pre><code class="language-none">Platform.recordingsDir</code></pre></div>
+
+<p>For more information about the Platform class, position your cursor next to Platform and press <code>control+D</code>.</p>
+
+<h3 id="toc_3">Get familiar with Extensions</h3>
+
+<p>SuperCollider supports the addition of <strong>extensions</strong>. You can install extensions by copying them to the Extensions folder. Depending on your platform, the folder will be located on a different place. Use this command to know its location:</p>
+
+<p>System extension directory:</p>
+
+<div><pre><code class="language-none">Platform.systemExtensionDir</code></pre></div>
+
+<p>You can find more information about <em>Using Extensions</em> on the SuperCollider Help browser.</p>
+
+<h4 id="toc_4">Geting familiar with Quarks</h4>
+
+<p>Similarly, SuperCollider supports the addition of <strong>quarks</strong>. </p>
+
+<p>Quarks are packages of SuperCollider code containing classes, extension methods, documentation and server UGen plugins. You can easily install/uninstall quarks using the GUI provided by SuperCollider.</p>
+
+<p>You can find more information about <em>Using Quarks</em> on the SuperCollider Help browser as well as here:</p>
+
+<ul>
+<li><a href="https://doc.sccode.org/Guides/UsingQuarks.html">Using Quarks</a></li>
+<li><a href="https://www.youtube.com/watch?v=m5QrwV5Msgk">Installing Quarks into Supercollider</a> (video)</li>
+</ul>
+
+<p>SuperCollider includes a manager for downloading these packages. You can launch the Quarks GUI by typing and executing the following line on the SuperCollider code editor:</p>
+
+<div><pre><code class="language-none">Quarks.gui</code></pre></div>
+
+<p><strong>For Windows users</strong>: </p>
+
+<p>You will need to install Git on Windows in order to execute the command <code>Quarks.gui</code> successfully.</p>
+
+<p>To install Git on Windows go to <a href="https://gitforwindows.org">https://gitforwindows.org</a> and follow the instructions.</p>
+
+<p>More info can be found here: <a href="https://git-scm.com/book/en/v2/Getting-Started-Installing-Git">https://git-scm.com/book/en/v2/Getting-Started-Installing-Git</a></p>
+
+<h3 id="toc_5">Get familiar with getting access to Library</h3>
+
+<p>An important directory used by SuperCollider is the Library, which usually is hidden by default in MacOS and Windows.</p>
+
+<p>In this directory you will find the quarks, extensions, help files, and the tmp folder, among others.</p>
+
+<p>To find out where the Library is located, execute the following command in the SuperCollider code editor.</p>
+
+<p>System application support directory:</p>
+
+<div><pre><code class="language-none">Platform.systemAppSupportDir</code></pre></div>
+
+<p>Try to get access to this directory from your File manager. If you can&#39;t find it, you will need to tell the OS to make it visible.</p>
+
+<p><strong>For MacOS users</strong>: The folder is located at <code>~/Library/Application Support/SuperCollider</code>. </p>
+
+<p>If you cannot find this folder, here there are two links that explain how to make it visible:</p>
+
+<ul>
+<li><a href="https://www.lifewire.com/os-x-is-hiding-your-library-folder-2260833">Three Ways to Access the Library Folder on Your Mac</a></li>
+<li><a href="https://www.macrumors.com/how-to/reveal-library-folder-in-macos/">https://www.macrumors.com/how-to/reveal-library-folder-in-macos/</a></li>
+</ul>
+
+<p><strong>For Windows users</strong>: The folder is located at <code>~\AppData\Local\SuperCollider\Extensions\</code></p>
+
+<p>To make it visible, got to the directory Local using the File manager and select from the top menu <code>View &gt; Hidden items</code>.</p>
+
+<p><strong>For Linux users</strong>: The folder is located at <code>~/.local/share/SuperCollider/Extensions/</code>.</p>
+
+<h2 id="toc_6">Step 2: Install cURL</h2>
+
+<p><code>cURL</code> is a command-line tool that lets you transfer data to/from a server using various protocols. It allows for making HTTP requests without a web browser.</p>
+
+<h3 id="toc_7">Check whether you have <code>cURL</code> installed</h3>
+
+<p><code>cURL</code> should be installed in your computer so that Freesound.quark and the extensions built upon Freesound quark work. </p>
+
+<p><strong>For Windows users</strong>: </p>
+
+<p>If you have version 1803 or later of Windows 10, cURL is installed by default. You can check whether you have <code>curl</code> installed by opening the command prompt (Windows).</p>
+
+<p>If you don&#39;t know how to open the command prompt in Windows, here&#39;s a link that explains how to do it:</p>
+
+<p><a href="https://www.ionos.co.uk/digitalguide/server/tools/open-command-prompt/">https://www.ionos.co.uk/digitalguide/server/tools/open-command-prompt/</a></p>
+
+<p>Once you have the command prompt open, type the following:</p>
+
+<div><pre><code class="language-none">curl --help</code></pre></div>
+
+<p>If a help file is displayed, this means that curl is installed. If it is not installed, you will need to install it. </p>
+
+<p><strong>For Mac/Linux users</strong>: </p>
+
+<p><code>cURL</code> is installed by default on MacOS. Open the computer&#39;s terminal and type:</p>
+
+<div><pre><code class="language-none">curl --help</code></pre></div>
+
+<p>If a help file is displayed, this means that curl is installed. If it is not installed, you will need to install it. </p>
+
+<h3 id="toc_8">Installing <code>cURL</code> (if need be)</h3>
+
+<p><strong>For Windows users</strong>: </p>
+
+<p>Here you can find two tutorials on how to install cURL on Windows: </p>
+
+<ul>
+<li><a href="https://developer.zendesk.com/documentation/developer-tools/getting-started/installing-and-using-curl/#windows">Installing and using cURL on Windows</a></li>
+<li><a href="https://help.ubidots.com/en/articles/2165289-learn-how-to-install-run-curl-on-windows-macosx-linux">Learn how to install &amp; run cURL on Windows</a></li>
+</ul>
+
+<p><strong>For macOS users</strong>: </p>
+
+<p>Here you can find two tutorials on how to install cURL on Mac: </p>
+
+<ul>
+<li><a href="https://developer.zendesk.com/documentation/developer-tools/getting-started/installing-and-using-curl/#macos">Installing and using cURL on macOS</a></li>
+<li><a href="https://help.ubidots.com/en/articles/2165289-learn-how-to-install-run-curl-on-windows-macosx-linux">Learn how to install &amp; run cURL on macOS</a></li>
+</ul>
+
+<p><strong>For Linux users</strong>: </p>
+
+<p>Here you can find one tutorial on how to install cURL on Linux using the computer&#39;s terminal: </p>
+
+<ul>
+<li><a href="https://help.ubidots.com/en/articles/2165289-learn-how-to-install-run-curl-on-windows-macosx-linux">Learn how to install &amp; run cURL on Windows</a></li>
+</ul>
+
+<h2 id="toc_9">Step 3: Install Extensions</h2>
+
+<h3 id="toc_10">Install Freesound Quark</h3>
+
+<p>Once you have executed <code>Quarks.gui</code> on the SuperCollider code editor, you will see a new window with a list of available Quarks. </p>
+
+<p>Select <code>Freesound</code> from the list and click the <code>+</code> button to install it.</p>
+
+<p>Recompile SuperCollider from the upper menu: <code>Language &gt; Recompile class library</code></p>
+
+<p>Type <code>Freesound</code> in the code editor and then press <code>control+D</code> to open the Help file.</p>
+
+<p><strong>Note</strong>: The quark has been installed the system application support directory <code>Platform.systemAppSupportDir</code> under the folder <code>downloaded-quarks</code>. To check that the installation has been successful, you can check it via your OS file directory manager (e.g. Finder on MacOS or File Manager on Windows).</p>
+
+<p>To open the help file, press <code>command+D</code> next to the word <code>Freesound</code> in the SuperCollider code editor. As you will see in the Help file, you will need an API key to make it work:</p>
+
+<div><pre><code class="language-none">Freesound.authType = &quot;token&quot;;// default, only needed if you changed it
+Freesound.token=&quot;&lt;your_api_key&gt;&quot;;</code></pre></div>
+
+<p>In this session, you will be provided with one. However, you are encouraged to request your own after the session. This will require that you have a Freesound.org user account. If you don&#39;t have a user account, consider creating one!</p>
+
+<p>You can find more information about the API key here:</p>
+
+<ul>
+<li><a href="https://freesound.org/help/developers/">Freesound API for Developers explained</a></li>
+<li><a href="https://freesound.org/apiv2/apply/">Your Freesound API access credentials</a></li>
+</ul>
+
+<h3 id="toc_11">Install FluCoMa</h3>
+
+<p>Install FluCoMa from <a href="https://www.flucoma.org/download/">https://www.flucoma.org</a></p>
+
+<p>Latest version: <a href="https://github.com/flucoma/flucoma-sc/releases/latest">https://github.com/flucoma/flucoma-sc/releases/latest</a></p>
+
+<ul>
+<li><code>FluCoMa-SC-Linux.tar.gz</code> (1.0.8)</li>
+<li><code>FluCoMa-SC-Mac.dmg</code> (1.0.8)</li>
+<li><code>FluCoMa-SC-Windows.zip</code> (1.0.8)</li>
+</ul>
+
+<p>Unzip the file.</p>
+
+<p>Move the files to your SuperCollider <code>Extensions</code> folder. You can find its location typing <code>Platform.systemExtensionDir</code> on the SuperCollider code editor.</p>
+
+<p>To check that it has been successfully installed, first recompile SuperCollider from the upper menu: <code>Language &gt; Recompile class library</code></p>
+
+<p><strong>For MacOS users</strong>: Before running the code, make sure to remove the quarantine attribute of the <code>FluidCorpusManipulation</code> folder typing the following in the Terminal:</p>
+
+<div><pre><code class="language-none">sudo xattr -r -d com.apple.quarantine /path/to/MyApp.app</code></pre></div>
+
+<p>For example:</p>
+
+<div><pre><code class="language-none">sudo xattr -r -d com.apple.quarantine /Library/Application Support/SuperCollider/Extensions/FluidCorpusManipulation/</code></pre></div>
+
+<p>You can find more info about the quarantine attribute here: </p>
+
+<ul>
+<li><a href="https://derflounder.wordpress.com/2012/11/20/clearing-the-quarantine-extended-attribute-from-downloaded-applications/">Clearing the quarantine extended attribute from downloaded applications</a></li>
+</ul>
+
+<h3 id="toc_12">Install MIRLC 2.0 &amp; MIRLCa</h3>
+
+<p>MIRLC 2.0 and MIRLCa are two SuperCollider extensions (under development!). You can download a version under <code>SC Extensions</code> of this code repository.</p>
+
+<p>Move the files to your SuperCollider <code>Extensions</code> folder. You can find its location typing <code>Platform.systemExtensionDir</code> on the SuperCollider code editor.</p>
+
+<p>To check that it has been successfully installed, first recompile SuperCollider from the upper menu: <code>Language &gt; Recompile class library</code></p>
+
+<p><strong>Note</strong>: If you have MIRLCa installed from a previous version (e.g. 2021 MIRLCa workshops), it is worth noting that it does not work with the latest version of FluCoMa. There&#39;s a workaround but we recommend that you update the MIRLCa code as well. The error is related to the new version of FluCoMa and the generated <code>pca.JSON</code>, which will not work unless you change the following. Search for  <code>&quot;cols&quot;: 26,</code> and rename it to <code>&quot;rows&quot;: 26,</code> 
+You can find more info here: </p>
+
+<ul>
+<li><a href="https://github.com/flucoma/flucoma-sc/issues/33">ERROR: FluidPCA - Invalid JSON format #33 </a></li>
+</ul>
+
+<h3 id="toc_13">How to change the Freesound API key token on <code>MIRLC 2.0</code></h3>
+
+<p>You will have to create your own Freesound API key token to make it work. </p>
+
+<p>To do that, you will need to request a Freesound API key token here: <a href="https://freesound.org/apiv2/apply">https://freesound.org/apiv2/apply</a></p>
+
+<p>You can find more information about Token authentication on Freesound here:
+<a href="https://freesound.org/docs/api/authentication.html">https://freesound.org/docs/api/authentication.html</a></p>
+
+<p>Then, you can change the Freesound API key token on the class file <code>MIRLCRep2</code> under the <code>MIRLC 2.0</code> folder in the <code>Extensions</code> folder.</p>
+
+<h2 id="toc_14">Step 4: Test the extensions</h2>
+
+<p>If you haven&#39;t done it yet: In order to include the extensions in SuperCollider, you will need to recompile the class library. For that, click on the option <code>Language</code> at the top menu and select <code>Recompile Class Library</code>: </p>
+
+<p><code>Language &gt; Recompile class library</code></p>
+
+<h2 id="toc_15">Step 5: Tutorial time!</h2>
+
+<p>Please refer to the tutorials of the workshop to investigate how each of the extensions work. Happy coding!</p>
+
+
+
+
+</body>
+
+</html>

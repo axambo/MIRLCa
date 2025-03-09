@@ -1,0 +1,528 @@
+TITLE:: MIRLCa
+summary:: The extension MIRLCa.sc is a follow-up work-in-progress of MIRLC.sc, which provides a high-level approach to using MIR techniques in live coding. The MIRLCa class is designed for bringing some interactive machine learning capabilities using the FluidCorpusManipulation library when interacting with audio samples from Freesound.org using and expanding the Freesound quark for SuperCollider.
+categories:: Machine learning
+related:: Classes/MIRLCRep2, Classes/FluidMLPClassifier, Freesound
+
+DESCRIPTION::
+MIRLCa is a SuperCollider extension that inherits from MIRLCRep2 class and expands its capabilities by proposing a virtual agent that embodies interactive machine learning techniques. This version has a binary classifier that predicts 'good' vs 'bad' sounds from Freesound as well as a proxy class under development that allows to create a dataset of lines of code to be able to predict the next line of code. MIRLCa works towards providing a VA to interact with Freesound.org.
+
+
+CLASSMETHODS::
+
+METHOD:: new
+Creates a new instance. Extends the method from MIRLCRep2.
+
+ARGUMENT:: backend
+An link::Classes/Integer:: indicating the database used, default 0 to use the Freesound database.
+
+ARGUMENT:: dbSize
+An link::Classes/Integer:: indicating the size of the database in terms of the total number of sounds of the Freesound database.
+
+ARGUMENT:: path
+A link::Classes/String:: containing the path name where the sounds are downloaded (write mode).
+
+ARGUMENT:: creditsPath
+A link::Classes/String:: containing the path name where the sound credits list is stored (write mode).
+
+ARGUMENT:: modelsPath
+A link::Classes/String:: containing the path name where the models are loaded from (read mode).
+
+returns:: A link::Classes/MIRLCa::
+
+
+INSTANCEMETHODS::
+
+subsection:: Performance methods
+
+METHOD:: id
+
+In performance mode, returns a sound by its Freesound ID number.
+
+ARGUMENT:: id
+An link::Classes/Integer:: indicating the Freesound ID number of a sound.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved.
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the link::Classes/MIRLCaProxy:: subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: tag
+In performance mode, returns the best candidate of a sound from Freesound that contains a requested tag.
+
+ARGUMENT:: tag
+A link::Classes/String:: that indicates the tag.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. (TODO: to be able to increase the size).
+
+ARGUMENT:: candidates
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds)
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the link::Classes/MIRLCaProxy:: subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: random
+In performance mode, returns the best candidate of a list of random sounds from Freesound.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. (TODO: to be able to increase the size).
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds)
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the link::Classes/MIRLCaProxy:: subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: similar
+In performance mode, returns the best candidate of a list of similar sounds from Freesound given a target sound.
+
+ARGUMENT:: targetnumsnd
+An link::Classes/Integer:: that indicates the index number in the  EMPHASIS::metadata:: link::Classes/Array:: target sound to find a similar sound.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be returned. Note: Beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: candidates
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sound. Note: Beware of the current maximum number 14. (TODO: to be able to add more than 15 sounds).
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the link::Classes/MIRLCaProxy:: subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: diss
+Returns a sound based on the dissonance feature.
+
+ARGUMENT:: fvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the dissonance feature and indicates the value of the feature CODE::"dissonance"::. Default value is 1.0. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: fx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: fxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds).
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the MIRLCaProxy subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: bpm
+Returns a sound based on the BPM feature.
+
+ARGUMENT:: fvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the BPM feature and indicates the value of the feature CODE::"bpm"::. Default value is 60. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: fx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: fxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds).
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the MIRLCaProxy subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: dur
+Returns a sound based on the duration feature.
+
+ARGUMENT:: fvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the duration feature and indicates the value of the feature CODE::"dur"::. Default value is 10 seconds. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: fx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: fxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds).
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the MIRLCaProxy subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: pitch
+Returns a sound based on the pitch feature.
+
+ARGUMENT:: fvalue
+An link::Classes/Integer:: or link::Classes/Float:: that is paired with the pitch feature and indicates the value of the feature CODE::"pitch"::. Default value is 440 Hz. Check the Freesound API for the full list of values.
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved. Note: beware of the current limit to 1. (TODO: to be able to increase the size).
+
+ARGUMENT:: fx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Default value is CODE::'conf'::. Only a few options are available in the internal dictionary. See the content method for details. Check the Freesound API for the full list of options.
+
+ARGUMENT:: fxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Default value is CODE::'lo'::. Only a few options are available in the internal dictionary and are relevant to certain filters. See the content method for details. Check the Freesound API for the full list of values.
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15. (TODO: to be able to add more than 15 sounds).
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the MIRLCaProxy subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: content
+Returns a sound by content search that is defined by a target sound (feature) and filter.
+
+ARGUMENT:: feature
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the feature value (CODE::fvalue::) and defines the characteristics of a target sound. Only a few options are available in the internal dictionary. Check the Freesound API for the full list of options:
+
+    definitionlist::
+	 ## STRONG::"dur"::
+	 || Default value. Returns CODE::".sfx.duration:":: from the Freesound API.
+	 ## STRONG::"pitch"::
+	 || Returns CODE::".lowlevel.pitch.mean:":: from the Freesound API.
+	 ## STRONG::"dissonance"::
+	 || Returns CODE::".lowlevel.dissonance.mean:":: from the Freesound API.
+	 ## STRONG::"bpm"::
+	 || Returns CODE::".rhythm.bpm:":: from the Freesound API.
+    ::
+
+ARGUMENT:: size
+An link::Classes/Integer:: that indicates the number of sounds to be retrieved.
+
+ARGUMENT:: fvalue
+An link::Classes/Integer:: or link::Classes/Float:: that indicates the value of the argument CODE::feature::. Default value is 1 that pairs with the default value of CODE::feature::, which is CODE::dur::. Check the Freesound API for the full list of values.
+
+ARGUMENT:: fx
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter value (CODE::fxvalue::) and defines the characteristics of a filter when retrieving the target sound. Only a few options are available in the internal dictionary. Check the Freesound API for the full list of options:
+
+    definitionlist::
+	 ## STRONG::"key"::
+	 || Default value. Returns CODE::"tonal.key_key:":: from the Freesound API.
+	 ## STRONG::"scale"::
+	 || Returns CODE::"tonal.key_scale:":: from the Freesound API.
+	 ## STRONG::"conf"::
+	 || Returns CODE::".lowlevel.pitch_instantaneous_confidence.mean:":: from the Freesound API.
+	 ## STRONG::"mfcc0"::
+	 || Returns CODE::"lowlevel.mfcc.mean[0]:":: from the Freesound API.
+	 ## STRONG::"mfcc1"::
+	 || Returns CODE::"lowlevel.mfcc.mean[1]:":: from the Freesound API.
+	 ## STRONG::"mfcc4"::
+	 || Returns CODE::"lowlevel.mfcc.mean[4]:":: from the Freesound API.
+    ::
+
+ARGUMENT:: fxvalue
+A link::Classes/Symbol:: in an internal dictionary or a link::Classes/String:: from the Freesound API, which pairs with the filter  (CODE::fx::) and indicates the range of the filter. Only a few options are available in the internal dictionary and are relevant to certain filters. Check the Freesound API for the full list of values:
+
+    definitionlist::
+	 ## STRONG::"Asharp"::
+	 || Default value. Returns CODE::"\"ASharp\"":: from the Freesound API.
+	 ## STRONG::"A"::
+	 || Returns CODE::"\"A\"":: from the Freesound API.
+	 ## STRONG::"B"::
+	 || Returns CODE::"\"B\"":: from the Freesound API.
+	 ## STRONG::"C"::
+	 || Returns CODE::"\"C\"":: from the Freesound API.
+	 ## STRONG::"D"::
+	 || Returns CODE::"\"D\"":: from the Freesound API.
+	 ## STRONG::"E"::
+	 || Returns CODE::"\"E\"":: from the Freesound API.
+	 ## STRONG::"F"::
+	 || Returns CODE::"\"F\"":: from the Freesound API.
+	 ## STRONG::"G"::
+	 || Returns CODE::"\"G\"":: from the Freesound API.
+	 ## STRONG::"major"::
+	 || Returns CODE::"\"major\"":: from the Freesound API.
+	 ## STRONG::"minor"::
+	 || Returns CODE::"\"minor\"":: from the Freesound API.
+	 ## STRONG::"hi"::
+	 || Returns CODE::"[0.8 TO 1]":: from the Freesound API.
+	 ## STRONG::"lo"::
+	 || Returns CODE::"[0 TO 0.2]":: from the Freesound API.
+	 ## STRONG::"bypass"::
+	 || Returns CODE::"[0 TO 1]":: from the Freesound API.
+	 ## STRONG::"1720"::
+	 || Returns CODE::"[17 TO 20]":: from the Freesound API.
+	 ## STRONG::"2040"::
+	 || Returns CODE::"[20 TO 40]":: from the Freesound API.
+	 ## STRONG::"neg"::
+	 || Returns CODE::"[-1124 TO -1121]":: from the Freesound API.
+    ::
+
+ARGUMENT:: cand
+An link::Classes/Integer:: that indicates the number of candidates of 'good' sounds. Beware of the current maximum number 15.
+
+ARGUMENT:: myFunc
+A function that is used internally to return the sound in the MIRLCaProxy subclass. This should be seen as a private argument.
+
+returns:: A link::Classes/FSSound:: sound
+
+
+subsection:: Training methods
+
+METHOD:: starttraining
+Function to start the process of training a data set.
+
+METHOD:: ok
+In training mode, annotates the present sound as a 'good' sound as part of the training set.
+
+METHOD:: ko
+In training mode, annotates the present sound as a 'bad' sound as part of the training set.
+
+METHOD:: skip
+In training mode, skips the present sound to be in the training set.
+
+METHOD:: trainrand
+In training mode, retrieves a random sound to be annotated.
+
+METHOD:: trainid
+In training mode, retrieves a specific sound to be annotated.
+
+ARGUMENT:: idnumber
+An link::Classes/Integer:: indicating the Freesound ID number of a sound.
+
+returns:: A link::Classes/FSSound:: sound
+
+METHOD:: stoptraining
+In training mode, stops the training process.
+
+ARGUMENT:: perc
+The threshold of the number of candidates for the training set vs the number of candidates for the testing set as a proportion value. Beware of the permitted ranges: 0.0-1.0.
+
+returns:: A link::Classes/String:: indicating the accuracy value in percentage (0%-100%)
+
+METHOD:: save
+In training mode, it saves the JSON files of the machine learning model generated.
+
+returns:: Three JSON files of the type link::Classes/File::
+
+METHOD:: continuetraining
+In training mode, starts training again with the latest mode selected (either CODE::random:: or CODE::id::). Alternatively, the mode can be changed passing it as an argument.
+
+ARGUMENT:: mode
+A link::Classes/String:: indicating one of the following modes:
+
+    definitionlist::
+	 ## STRONG::"random"::
+	 || Default value. Returns a random sound from Freesound.
+	 ## STRONG::"id"::
+	 || Returns a sound by ID from Freesound.
+    ::
+
+returns:: A link::Classes/FSSound:: sound, either by random or by sound ID
+
+METHOD:: pause
+In training mode, fades out the sound that is currently playing. Deprecated function since using  CODE::trainrand:: instead of the previous automatic process.
+
+METHOD:: archive
+In training mode, saves the training dataset to continue later. Only one session can be saved at present.
+
+METHOD:: load
+In training mode, loads the saved training dataset to continue training.
+
+METHOD:: showinfo
+In training mode, shows status info about the dataset.
+
+returns:: A link::Classes/String:: indicating the status.
+
+METHOD:: printdirectories
+In training or performance mode, prints the directory paths where the sounds are downloaded and the sound credits list is generated.
+
+PRIVATE:: initagent, fadeout_t, loadmetadata_t, getsoundfromfreesound, giverandomsound, getbestfromtarget, givesoundbyid, selectanswerbymode, getbest, pris, messagestraining, storeplaysound, updatedictm, prid, printcredits, infocandidate, infocandidates, saveMFCCmetadata, savesoundMFCCdescriptors, servebestcandidate, updatedict, warncandidates, warningbadsounds, warningnilanalysis, warningnilcontent, warningnildetail, warningnilsound, warnunhandledlimitscandidates, warnunhandledlimitssize, warnunhandledlimitstarget
+
+EXAMPLES::
+
+subsection:: Setup and Instantiation
+
+code::
+(
+
+// MIRLCa uses 3 directories to: 1) download the sounds from Freesound, 2) create a sound credits list text file with a list of all the used sounds in the performance and 3) load the 3 JSON files that represent the machine learning model and write the 3 JSON files in the training mode.
+// Before instantiating MIRLCa, it is recommended that you define the 3 paths. Please note: the directory should exist! The slash at the end is very important.
+//
+// 1) Directory to download the sounds from Freesound:
+
+z = "/Users/anna/Desktop/MIRLCa-downloads/";
+
+// 2) Directory to create a sound credits list text file with a list of all the used sounds during the live coding session:
+
+y ="/Users/anna/Desktop/MIRLCa-credits/";
+
+// 3) Directory from where to load the 3 JSON files that represent the machine learning model and to save the generated 3 JSON files in the training mode. Please note that the three files "model.JSON", "pca.JSON" and "standardizer.JSON" should exist inside this folder.
+
+x ="/Users/anna/Desktop/MIRLCa-default-models/";
+
+File.mkdir(z); File.mkdir(y); File.mkdir(x);// This line will create the directory if it doesn't exist yet.
+
+// Create an instance with defined paths
+a = MIRLCa.new(path: z, creditsPath: y, modelsPath: x);
+
+// MIRLCa has two modes: 1) performance mode and 2) training mode.
+
+)
+::
+
+subsection:: Performance Mode
+
+code::
+(
+
+// Before using similar sound, you need a target sound, this can be a sound by ID, by tag or by random
+
+a.id(31362)
+a.id(3333)
+
+a.tag("footsteps")
+a.tag("jack"+"plugin")
+
+// For a random sound, you can define the number of candidates for the best random sound. The default value is 7. The larger the number, the more time it will take. Be patient.
+
+a.random
+
+a.random(cand:10)
+a.random(cand:4)
+
+// Get a similar sound, it will pick the first "good" sound from a list of 14 candidates
+
+a.similar
+
+// If you have more than one sound in the collection, you can point the sound target using the index number of the sound in the collection
+// e.g. if there were 3 sounds in group "a", and you want the third sound, the index is number 2. By default it will select the first number (index = 0).
+
+// Therefore a.similar is the same than a.similar(0)
+
+a.similar(1)
+
+// You can build a step-by-step similarity group..
+
+a.similar(2)
+
+// You can apply the sound effects from MIRLC2 such as a low-pass filter
+
+a.lowpf
+
+// Or bypassing the effect...
+
+a.bypass
+
+// Check all the available sound effects on the HelpFile of MIRLCRep2
+
+// Change the speed...
+
+a.play(0.5)
+
+// Go back to normal...
+
+a.play
+
+// Print the credits on the Post window
+
+a.credits
+
+// And fadeout the group...
+
+a.fadeout
+
+)
+::
+
+subsection:: Training Mode
+
+code::
+(
+
+// Start the training
+
+a.starttraining
+
+// To retrieve a random sound
+
+a.trainrand
+
+// Or to retrieve a sound by ID number
+
+a.trainid(3333)
+
+// If you see any problems in the Post window, you can skip the sound
+
+a.skip
+
+// To annotate the sound: you need to wait until the sound is dowloaded, and then you need to execute the methods 'ok' or 'ko' depending on whether you like the sound or not.
+
+
+// If you like the sound, execute this command
+
+a.ok
+
+// If you don't like the sound, execute this command
+
+a.ko
+
+// Once you annotate the sound, you will need to tell what's the next sound you want to annotate by executing the methods 'trainrand' or 'trainid' until you stop training.
+
+// Once you have trained some sounds, you can stop the training to check what is the accuracy result so far.
+
+a.stoptraining
+
+// After this function is executed, you can either continue the training or save the results to JSON files.
+
+// If you don't like the result, you can continue training
+
+a.continuetraining
+
+// And then either
+
+a.trainrand
+
+// Or
+
+a.trainid(3334)
+
+// You can always print the information of how many sounds you have annotated so far during the training session
+
+a.showinfo
+
+// After stop training, if you are happy with the accuracy results, execute this command to save your results to JSON files.
+
+a.save
+
+// If there's a problem with the session, or a sound that is not correctly downloaded, you can temporarily archive the training dataset
+
+a.archive
+
+// It is then possible to load it again in a new SuperCollider / MIRLCa session.
+
+a.load
+
+// The starttraining needs to be called again
+
+a.starttraining
+
+// To check that the training dataset has been properly loaded you can execute
+
+a.showinfo
+
+
+
+)
+::
+

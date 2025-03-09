@@ -1,0 +1,308 @@
+TITLE:: MIRLCRew2
+summary:: The extension MIRLC2.sc is a follow-up work-in-progress of MIRLC.sc, which provides a high-level approach to using MIR techniques in live coding. The MIRLCRew2 class is designed for rewiring an audio in signal as both a control signal or audio signal using MIR techniques in SuperCollider. This version has more  effects, more control on how to rewire the signal, and a better organisation of the code.
+categories:: Music Information Retrieval
+related:: Classes/MIRLCRep2
+
+DESCRIPTION::
+MIRLC2 is an incremental improvement over MIRLC. For the moment it includes the MIRLCRep2 module, which is designed for repurposing audio samples from Freesound.org using and expanding the link::Classes/Freesound:: quark for SuperCollider. This version provides improved methods for querying and some automatic methods. It can also apply effects to the downloaded sounds. The MIRLCRew2 class is designed for rewiring an audio-in signal as both a control signal or audio signal using MIR techniques in SuperCollider. The MIRLCRex class has been discontinued here.
+
+CLASSMETHODS::
+
+METHOD:: new
+Creates a new instance.
+
+ARGUMENT:: mod
+An link::Classes/Integer:: indicating listening to audio in (0) or listening to an audio track (1).
+
+ARGUMENT:: filename
+A link::Classes/String:: that indicates the filename path in case of listening to an audio track.
+
+ARGUMENT:: nchannels
+An link::Classes/Integer:: indicating the number of channels of the audio input. By default it is 1.
+
+returns:: A link::Classes/MIRLCRew2::
+
+PRIVATE:: mode, soundfile, server
+
+
+INSTANCEMETHODS::
+
+subsection:: Basic methods
+
+METHOD:: source
+Returns the source sound.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined volume.
+
+METHOD:: overlay
+Returns the overlaid source with the MIRed effect.
+
+ARGUMENT:: mode
+\on overlays both audio sources, \off only original source, \only only MIRed source.
+
+ARGUMENT:: amp1
+An link::Classes/Float:: indicating the volume of the original source.
+
+ARGUMENT:: amp2
+An link::Classes/Float:: indicating the volume of the MIRed source.
+
+returns:: The sound set a the defined condition.
+
+subsection:: Basic play methods
+
+METHOD:: volume
+This function controls the general volume from 0 to 1 for both source and MIRed sound.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: play
+This function plays the sounds of the same group at the same rate.
+
+ARGUMENT:: rate
+A link::Classes/Float:: indicating the rate. 1.0 is the server's sample rate, 2.0 is one octave up, 0.5 is one octave down -1.0 is backwards normal rate… etc. Interpolation is cubic. This implements the rate of the link::Classes/PlayBuf::
+
+returns:: The sound set a the defined condition.
+
+METHOD:: fadeout
+Fades out all synths of a group of sounds with a smooth fade out.
+
+ARGUMENT:: release
+Release time in seconds.
+
+returns:: The sound set a the defined condition.
+
+subsection:: Sound effects methods
+
+METHOD:: lowpf
+Applies a low pass filter. It implements the link::Classes/LPF:: filter.
+
+ARGUMENT:: freq
+Cutoff frequency in Hertz. WARNING: due to the nature of its implementation frequency values close to 0 may cause glitches and/or extremely loud audio artifacts!
+
+METHOD:: highpf
+Applies a high pass filter. It implements the link::Classes/HPF:: filter.
+
+ARGUMENT:: freq
+Cutoff frequency in Hertz. WARNING: due to the nature of its implementation frequency values close to 0 may cause glitches and/or extremely loud audio artifacts!
+
+METHOD:: bandpf
+Applies a band pass filter. It implements the link::Classes/BPF:: filter.
+
+ARGUMENT:: freq
+Centre frequency in Hertz. WARNING: due to the nature of its implementation frequency values close to 0 may cause glitches and/or extremely loud audio artifacts.
+
+METHOD:: reverb
+Applies a reverb. It implements the link::Classes/FreeVerb:: filter.
+
+ARGUMENT:: mix
+Dry/wet balance. range 0..1.
+
+METHOD:: delay
+Applies a delay. It implements the link::Classes/CombL:: filter, which is a comb delay line with linear interpolation.
+
+ARGUMENT:: decay
+Time for the echoes to decay by 60 decibels. If this time is negative then the feedback coefficient will be negative, thus emphasizing only odd harmonics at an octave lower. Try to avoid large decay times because they are sensitive to DC bias. Infinite decay times are permitted. A decay time of inf leads to a feedback coefficient of 1, and a decay time of -inf leads to a feedback coefficient of -1.
+
+METHOD:: vibrato
+Applies a phaser. It implements the link::Classes/DelayC:: filter, which is a simple delay line with cubic interpolation.
+
+ARGUMENT:: maxdelaytime
+The maximum delay time in seconds. Used to initialize the delay buffer size.
+
+METHOD:: bitcrush
+Applies a bitcrush filter.
+
+ARGUMENT:: bit
+The exponent of the bit crusher.
+
+METHOD:: distort
+Applies a distortion.
+
+ARGUMENT:: distortlevel
+Controls the distortion volume level.
+
+METHOD:: rmod
+Applies a ring modulation effect.
+
+ARGUMENT:: freq
+Controls the frequency of the carrier sine wave signal.
+
+subsection:: Tracking methods
+
+METHOD:: onsets
+Tracks the onsets of the audio source.
+
+ARGUMENT:: instr
+Maps the onsets to the selected predefined instrument: \sin, \lfo, \grain
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: amps
+Tracks the amplitude of the audio source.
+
+ARGUMENT:: instr
+Maps the onsets to the selected predefined instrument: \sin, \lfo, \grain.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: key
+Tracks the key of the audio source.
+
+ARGUMENT:: instr
+Maps the key to the predefined instrument \chords.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: pitch
+Tracks the pitch of the audio source.
+
+ARGUMENT:: instr
+Maps the pitch to the selected predefined instrument: \resonators, \resonators2.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: freq
+Tracks the frequency of the audio source.
+
+ARGUMENT:: instr
+Maps the frequency to the selected predefined instrument: \resonators, \resonators2.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+METHOD:: beats
+Tracks the beats of the audio source.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+ARGUMENT:: w1
+An link::Classes/Float:: indicating the weight of the instrument \kickdrum (0.0-1.0).
+
+ARGUMENT:: w2
+An link::Classes/Float:: indicating the weight of the instrument \openhat (0.0-1.0).
+
+ARGUMENT:: w3
+An link::Classes/Float:: indicating the weight of the instrument \closedhat (0.0-1.0).
+
+ARGUMENT:: rate
+A factor of the beats time%rate to reduce the number of beats.
+
+returns:: The sound set a the defined condition.
+
+METHOD:: biop
+Tracks a binary operation of the audio source and the MIRed source.
+
+ARGUMENT:: bomode
+An link::Classes/Float:: indicating bomode (0-1) which relates to the frequency of the operation.
+
+ARGUMENT:: amp
+An link::Classes/Float:: indicating the volume of the source (0-1).
+
+returns:: The sound set a the defined condition.
+
+subsection:: Utils methods
+
+METHOD:: free
+Frees all.
+
+METHOD:: plotserver
+Plots the server.
+
+returns:: A SC server object (plotTree and queryAllNodes).
+
+METHOD:: cmdPeriod
+Activated when stopping the code, stops all sounds.
+
+PRIVATE:: init, b1, b2, b3, freeosc, freeinstr, freetrackinginfo, freefx, freeaddons
+
+EXAMPLES::
+
+code::
+
+// instantiation
+
+a = MIRLCRew2.new // audio in mode, mod: 0 by default (make sure to wear headphones and to connect a microphone)
+// or
+a = MIRLCRew2.new(mod:1) // audio sample by default: "sounds/a11wlk01.wav"
+// or
+a = MIRLCRew2.new(mod: 1, filename: "Users/anna/Documents/Work/Detuning/AudioFiles/7/tuning-a4-a0_mono.wav", nchannels: 1) // path to a sound sample
+
+
+// sound source
+
+a.source // pure audio source, you always need to start with this function
+
+
+// sound from audio features
+
+a.onsets
+a.onsets(instr: \sin, amp: 4);
+a.overlay(\only);
+a.onsets(instr: \sin, amp: 4);
+a.onsets(instr: \lfo, amp: 2);
+a.onsets(instr: \grain, amp: 1);
+a.overlay(mode: \on, amp1: 0.1, amp2: 0.9)
+
+a.amps;
+a.overlay(\only);
+a.amps(instr: \sin, amp: 10);
+a.amps(instr: \lfo, amp: 8);
+a.amps(instr: \grain, amp: 10);
+a.overlay(mode: \on, amp1: 0.1, amp2: 0.9)
+
+a.beats
+a.beats(amp:0.2)
+a.beats(amp:0.2, w1:1, w2:0, w3:0)
+a.beats(amp:0.2, w1:0.6, w2:0.25, w3:0.25)
+a.beats(amp:0.6, w1:1, w2:0, w3:0, rate: 8)
+a.overlay(\only)
+a.overlay(mode: \on, amp1: 0.2, amp2: 0.8)
+
+a.key
+a.overlay(\only);
+a.overlay(\on, amp1: 0.2, amp2: 2);
+
+a.pitch
+a.overlay(\only);
+a.overlay(\on, amp1: 0.1, amp2: 0.9);
+a.pitch(instr: \resonators2); a.overlay(\on, amp1: 0.1, amp2: 0.9);
+a.pitch(instr: \resonators); a.overlay(\on, amp1: 0.1, amp2: 0.9);
+
+a.freq
+a.freq(instr: \resonators2)
+a.freq(instr: \resonators)
+a.overlay(\only);
+a.overlay(\on, amp1: 0.2, amp2: 0.8);
+
+a.biop(bomode: 0);
+a.biop(bomode: 1);
+a.overlay(\only);
+a.overlay(\on, amp1: 0.1, amp2: 0.9);
+
+
+a.volume(0.2);
+a.fadeout(10);
+a.free;
+
+::
